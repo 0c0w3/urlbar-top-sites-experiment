@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "name": "Top Sites Experiment",
+  "version": "1.0.0",
+  "description": "Show top sites in the urlbar when you focus it.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "top-sites-experiment@mozilla.org"
+    }
+  },
+  "permissions": [
+    "bookmarks",
+    "search",
+    "tabs",
+    "topSites",
+    "urlbar"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  }
+}

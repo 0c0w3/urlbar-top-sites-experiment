@@ -1,0 +1,27 @@
+{
+  "name": "top-sites-experiment",
+  "version": "1.0.0",
+  "description": "A Firefox experiment that shows top sites in the urlbar when you focus it.",
+  "private": true,
+  "license": "MPLv2",
+  "webExt": {
+    "build": {
+      "overwriteDest": true
+    },
+    "ignoreFiles": [
+      "*~"
+    ],
+    "sourceDir": "src"
+  },
+  "devDependencies": {
+    "web-ext": "*",
+    "eslint": "5.16.0",
+    "eslint-plugin-mozilla": "^2",
+    "eslint-config-prettier": "4.2.0",
+    "eslint-plugin-fetch-options": "0.0.5",
+    "eslint-plugin-no-unsanitized": "3.0.2",
+    "eslint-plugin-prettier": "3.0.1",
+    "eslint-plugin-html": "5.0.3",
+    "prettier": "1.17.0"
+  }
+}
