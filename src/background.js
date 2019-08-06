@@ -71,7 +71,7 @@ browser.urlbar.onResultsRequested.addListener(async query => {
           payload: {
             title: site.title,
             keyword: site.title,
-            isKeywordOffer: true,
+            keywordOffer: 2,
             query: "",
             icon: site.favicon,
           },
