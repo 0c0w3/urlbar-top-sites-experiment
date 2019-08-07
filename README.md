@@ -1,4 +1,4 @@
-# Top Sites Experiment Extension
+# Urlbar Top Sites Experiment Extension
 
 This is the extension for the top sites experiment in Firefox's urlbar. When
 installed, focusing the urlbar automatically opens the urlbar view and shows
