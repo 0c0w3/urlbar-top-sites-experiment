@@ -44,13 +44,20 @@ browser.urlbar.onResultsRequested.addListener(async query => {
         // appear as bookmarks.
         let tabs;
         try {
-          // Some URLs aren't valid match patterns for some reason.  query()
-          // throws in those cases.  Just ignore it.
+          // Work around a couple of browser.tabs annoyances:
+          //
+          // (1) Some URLs aren't valid match patterns for some reason.  query()
+          //     throws in those cases.  Just ignore it.
+          // (2) A match pattern that contains a fragment (#foo) doesn't match
+          //     anything, even if the pattern is the same as a tab's URL.  To
+          //     work around that, remove the fragment from the pattern.  That
+          //     may give us multiple matching tabs, so then find the tab that
+          //     matches the actual URL, if any.
           tabs = await browser.tabs.query({
-            url: result.payload.url,
+            url: result.payload.url.replace(/#.*$/, ""),
           });
         } catch (err) {}
-        if (tabs && tabs.length) {
+        if (tabs.find(tab => tab.url == site.url)) {
           result.type = "tab";
           result.source = "tabs";
         } else {
