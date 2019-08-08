@@ -57,7 +57,7 @@ browser.urlbar.onResultsRequested.addListener(async query => {
             url: result.payload.url.replace(/#.*$/, ""),
           });
         } catch (err) {}
-        if (tabs.find(tab => tab.url == site.url)) {
+        if (tabs && tabs.find(tab => tab.url == site.url)) {
           result.type = "tab";
           result.source = "tabs";
         } else {
