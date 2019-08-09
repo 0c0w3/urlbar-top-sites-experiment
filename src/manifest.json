@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Address Bar Top Sites Experiment",
+  "name": "Urlbar Top Sites Experiment",
   "version": "1.0.0",
-  "description": "Shows your top sites in the address bar when you focus it.",
+  "description": "Shows your top sites in the urlbar when you focus it.",
   "browser_specific_settings": {
     "gecko": {
       "id": "urlbar-top-sites-experiment@mozilla.org"

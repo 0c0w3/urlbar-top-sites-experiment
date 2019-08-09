@@ -1,7 +1,7 @@
 {
-  "name": "top-sites-experiment",
+  "name": "urlbar-top-sites-experiment",
   "version": "1.0.0",
-  "description": "A Firefox experiment that shows top sites in the urlbar when you focus it.",
+  "description": "A Firefox add-on experiment that shows your top sites in the urlbar when you focus it.",
   "private": true,
   "license": "MPLv2",
   "webExt": {
