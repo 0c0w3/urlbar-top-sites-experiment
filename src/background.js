@@ -4,20 +4,35 @@
 
 "use strict";
 
-const PROVIDER_NAME = "topSites";
+const BRANCHES = {
+  CONTROL: "control",
+  TREATMENT: "treatment",
+};
 
-// Enable urlbar engagement event telemetry.  See bugs 1559136 and 1570683.
-browser.urlbar.engagementTelemetry.set({ value: true });
+const URLBAR_PROVIDER_NAME = "topSites";
 
-// Enable openViewOnFocus.
-browser.urlbar.openViewOnFocus.set({ value: true });
+/**
+ * Logs a debug message, which the test harness interprets as a message the
+ * add-on is sending to the test.  See head.js for info.
+ *
+ * @param {string} msg
+ *   The message.
+ */
+function sendTestMessage(msg) {
+  console.debug(browser.runtime.id, msg);
+}
 
-// Add our top-sites results provider.
-browser.urlbar.onBehaviorRequested.addListener(query => {
+/**
+ * Our `browser.urlbar.onBehaviorRequested` listener.
+ */
+function getProviderBehavior(query) {
   return query.searchString ? "inactive" : "restricting";
-}, PROVIDER_NAME);
+}
 
-browser.urlbar.onResultsRequested.addListener(async query => {
+/**
+ * Our `browser.urlbar.onResultsRequested` listener.
+ */
+async function getProviderResults(query) {
   let sites = await browser.topSites.get({
     newtab: true,
     includeFavicon: true,
@@ -46,8 +61,9 @@ browser.urlbar.onResultsRequested.addListener(async query => {
         try {
           // Work around a couple of browser.tabs annoyances:
           //
-          // (1) Some URLs aren't valid match patterns for some reason.  query()
-          //     throws in those cases.  Just ignore it.
+          // (1) Some URLs aren't valid match patterns for some reason.
+          //     query() throws in those cases.  Just ignore it.
+          //
           // (2) A match pattern that contains a fragment (#foo) doesn't match
           //     anything, even if the pattern is the same as a tab's URL.  To
           //     work around that, remove the fragment from the pattern.  That
@@ -90,4 +106,84 @@ browser.urlbar.onResultsRequested.addListener(async query => {
     }
   }
   return results;
-}, PROVIDER_NAME);
+}
+
+/**
+ * Resets all the state we set on enrollment in the study.
+ *
+ * @param {bool} isTreatmentBranch
+ *   True if we were enrolled on the treatment branch, false if control.
+ */
+async function unenroll(isTreatmentBranch) {
+  await browser.urlbar.engagementTelemetry.clear({});
+  if (isTreatmentBranch) {
+    await browser.urlbar.openViewOnFocus.clear({});
+    await browser.urlbar.onBehaviorRequested.removeListener(
+      getProviderBehavior
+    );
+    await browser.urlbar.onResultsRequested.removeListener(getProviderResults);
+  }
+  sendTestMessage("unenrolled");
+}
+
+/**
+ * Sets up all appropriate state for enrollment in the study.
+ *
+ * @param {bool} isTreatmentBranch
+ *   True if we are enrolling on the treatment branch, false if control.
+ */
+async function enroll(isTreatmentBranch) {
+  await browser.normandyAddonStudy.onUnenroll.addListener(async () => {
+    await unenroll(isTreatmentBranch);
+  });
+
+  // Enable urlbar engagement event telemetry.  See bugs 1559136 and 1570683.
+  await browser.urlbar.engagementTelemetry.set({ value: true });
+
+  if (isTreatmentBranch) {
+    // Enable openViewOnFocus.
+    await browser.urlbar.openViewOnFocus.set({ value: true });
+
+    // Add our top-sites results provider.
+    await browser.urlbar.onBehaviorRequested.addListener(
+      getProviderBehavior,
+      URLBAR_PROVIDER_NAME
+    );
+    await browser.urlbar.onResultsRequested.addListener(
+      getProviderResults,
+      URLBAR_PROVIDER_NAME
+    );
+  }
+
+  sendTestMessage("enrolled");
+}
+
+(async function main() {
+  // We want to know two things: Whether we're being installed as a temporary
+  // add-on, and whether we're enrolled in a study.
+  let installPromise = new Promise(resolve => {
+    browser.runtime.onInstalled.addListener(details => {
+      resolve(details.temporary);
+    });
+  });
+  let studyPromise = new Promise(resolve => {
+    browser.normandyAddonStudy.getStudy().then(resolve);
+  });
+  let [isTemporaryInstall, study] = await Promise.all([
+    installPromise,
+    studyPromise,
+  ]);
+
+  console.debug(`isTemporaryInstall=${isTemporaryInstall} study=${study}`);
+
+  // If we're enrolled in the study, set everything up.  As a development
+  // convenience, act like we're enrolled if we're a temporary add-on.
+  if (
+    (study && study.active && Object.values(BRANCHES).includes(study.branch)) ||
+    (!study && isTemporaryInstall)
+  ) {
+    await enroll(!study || study.branch == BRANCHES.TREATMENT);
+  }
+
+  sendTestMessage("ready");
+})();

@@ -5,11 +5,13 @@
   "description": "Shows your top sites in the urlbar when you focus it.",
   "browser_specific_settings": {
     "gecko": {
-      "id": "urlbar-top-sites-experiment@mozilla.org"
+      "id": "urlbar-top-sites-experiment@mozilla.org",
+      "strict_min_version": "69.0b13"
     }
   },
   "permissions": [
     "bookmarks",
+    "normandyAddonStudy",
     "search",
     "tabs",
     "topSites",
@@ -19,5 +21,6 @@
     "scripts": [
       "background.js"
     ]
-  }
+  },
+  "incognito": "spanning"
 }
