@@ -59,12 +59,20 @@ Then:
 
        $ web-ext build
 
+   Or use a signed copy of the zip file.
+
 4. Copy the zip file into `srcdir/testing/extensions/tests/browser`:
 
        $ cp web-ext-artifacts/urlbar_top_sites_experiment-1.0.0.zip srcdir/testing/extensions/tests/browser
 
-5. `cd` into your `srcdir`.
-6. Run the test using `mach`:
+5. Update `EXPECTED_ADDON_SIGNED_STATE` as necessary in
+   `srcdir/testing/extensions/tests/browser/browser_urlbarTopSitesExtension.js`.
+   If your zip file is unsigned, its value should be
+   `AddonManager.SIGNEDSTATE_MISSING`. If it's signed, it should be
+   `AddonManager.SIGNEDSTATE_PRIVILEGED`.
+
+6. `cd` into your `srcdir`.
+7. Run the test using `mach`:
 
        $ ./mach mochitest -f browser --appname <path to Firefox binary> testing/extensions/tests/browser/browser_urlbarTopSitesExtension.js
 
