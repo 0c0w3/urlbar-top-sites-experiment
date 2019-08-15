@@ -68,6 +68,9 @@ Then:
 
        $ ./mach mochitest -f browser --appname <path to Firefox binary> testing/extensions/tests/browser/browser_urlbarTopSitesExtension.js
 
+   If your Firefox repo itself contains the Firefox binary (because you ran
+   `mach build`), you can omit the `--appname` argument.
+
 [mozilla-central]: http://hg.mozilla.org/mozilla-central/
 [mozilla-beta]: https://hg.mozilla.org/releases/mozilla-beta/
 
