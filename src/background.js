@@ -161,17 +161,13 @@ async function enroll(isTreatmentBranch) {
 (async function main() {
   // We want to know two things: Whether we're being installed as a temporary
   // add-on, and whether we're enrolled in a study.
-  let installPromise = new Promise(resolve => {
-    browser.runtime.onInstalled.addListener(details => {
-      resolve(details.temporary);
-    });
-  });
-  let studyPromise = new Promise(resolve => {
-    browser.normandyAddonStudy.getStudy().then(resolve);
-  });
   let [isTemporaryInstall, study] = await Promise.all([
-    installPromise,
-    studyPromise,
+    new Promise(resolve => {
+      browser.runtime.onInstalled.addListener(details => {
+        resolve(details.temporary);
+      });
+    }),
+    browser.normandyAddonStudy.getStudy(),
   ]);
 
   console.debug(`isTemporaryInstall=${isTemporaryInstall} study=${study}`);
