@@ -3,6 +3,12 @@
   "name": "Urlbar Top Sites Experiment",
   "version": "1.0.0",
   "description": "Shows your top sites in the urlbar when you focus it.",
+  "applications": {
+    "gecko": {
+      "id": "urlbar-top-sites-experiment@mozilla.org",
+      "strict_min_version": "69.0b13"
+    }
+  },
   "browser_specific_settings": {
     "gecko": {
       "id": "urlbar-top-sites-experiment@mozilla.org",
