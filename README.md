@@ -15,8 +15,8 @@ already shows your top sites. It also doesn't open in private windows.)
 * Firefox 69b13 or newer
 * Either a Mozilla-signed version of the add-on; or Firefox Nightly, Developer
   Edition, or any other Firefox build that gives privileges to temporarily
-  installed add-ons. This add-on uses Mozilla-privileged APIs (`browser.urlbar`
-  and `browser.normandyAddonStudy`)
+  installed add-ons (Beta does not). This add-on uses Mozilla-privileged APIs
+  (`browser.urlbar` and `browser.normandyAddonStudy`)
 
 ## Running
 
