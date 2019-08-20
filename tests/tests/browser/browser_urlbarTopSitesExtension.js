@@ -30,13 +30,10 @@ const EVENT_TELEMETRY_PREF = "eventTelemetry.enabled";
  */
 async function assertAppliedTreatmentToUI(win = window) {
   Assert.ok(win.gURLBar.openViewOnFocus, "openViewOnFocus should be true");
-  // We can remove this conditional once bug 1571161 is uplifted to 69.
-  if ("openViewOnFocusForCurrentTab" in win.gURLBar) {
-    Assert.ok(
-      win.gURLBar.openViewOnFocusForCurrentTab,
-      "openViewOnFocusForCurrentTab should be true"
-    );
-  }
+  Assert.ok(
+    win.gURLBar.openViewOnFocusForCurrentTab,
+    "openViewOnFocusForCurrentTab should be true"
+  );
   // Even with openViewOnFocus = true, the view should not open when the input
   // is focused programmatically.
   win.gURLBar.blur();
@@ -68,13 +65,10 @@ async function assertAppliedTreatmentToUI(win = window) {
  */
 async function assertNotAppliedTreatmentToUI(win = window) {
   Assert.ok(!win.gURLBar.openViewOnFocus, "openViewOnFocus should be false");
-  // We can remove this conditional once bug 1571161 is uplifted to 69.
-  if ("openViewOnFocusForCurrentTab" in win.gURLBar) {
-    Assert.ok(
-      !win.gURLBar.openViewOnFocusForCurrentTab,
-      "openViewOnFocusForCurrentTab should be false"
-    );
-  }
+  Assert.ok(
+    !win.gURLBar.openViewOnFocusForCurrentTab,
+    "openViewOnFocusForCurrentTab should be false"
+  );
   // The view should not open when the input is focused programmatically.
   win.gURLBar.blur();
   win.gURLBar.focus();
