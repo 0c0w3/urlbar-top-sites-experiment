@@ -79,7 +79,7 @@ Then:
    If your Firefox repo itself contains the Firefox binary (because you ran
    `mach build`), you can omit the `--appname` argument.
 
-   If mach doesn't find the test, remove your objdir, `mach build`, and try
+   If `mach` doesn't find the test, remove your objdir, `mach build`, and try
    again from step 1. (There's got to be a better way…)
 
 [mozilla-central]: http://hg.mozilla.org/mozilla-central/
