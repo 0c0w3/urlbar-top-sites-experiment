@@ -53,7 +53,7 @@ Then:
 2. Copy `tests/*` into `srcdir/testing/extensions/`, where `srcdir` is the
    top-level directory of your Firefox repo:
 
-       $ cp tests/* srcdir/testing/extensions
+       $ cp -R tests/* srcdir/testing/extensions
 
 3. Build the add-on zip file using `web-ext` as described above:
 
@@ -78,6 +78,9 @@ Then:
 
    If your Firefox repo itself contains the Firefox binary (because you ran
    `mach build`), you can omit the `--appname` argument.
+
+   If mach doesn't find the test, remove your objdir, `mach build`, and try
+   again from step 1. (There's got to be a better way…)
 
 [mozilla-central]: http://hg.mozilla.org/mozilla-central/
 [mozilla-beta]: https://hg.mozilla.org/releases/mozilla-beta/
