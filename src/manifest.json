@@ -28,5 +28,6 @@
       "background.js"
     ]
   },
-  "incognito": "spanning"
+  "incognito": "spanning",
+  "hidden": true
 }
