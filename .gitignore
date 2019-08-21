@@ -163,3 +163,4 @@ lextab.py
 !.vscode/tasks.json
 
 web-ext-artifacts/
+signed/
