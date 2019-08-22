@@ -42,6 +42,10 @@ async function getProviderResults(query) {
   // Convert the top sites to urlbar results.
   let results = [];
   for (let site of sites) {
+    if (!site) {
+      // `site` is undefined when there's a gap between tiles on newtab.
+      continue;
+    }
     switch (site.type) {
       case "url": {
         let result = {
