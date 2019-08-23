@@ -163,27 +163,34 @@ async function enroll(isTreatmentBranch) {
 }
 
 (async function main() {
-  // We want to know two things: Whether we're being installed as a temporary
-  // add-on, and whether we're enrolled in a study.
-  let [isTemporaryInstall, study] = await Promise.all([
-    new Promise(resolve => {
-      browser.runtime.onInstalled.addListener(details => {
-        resolve(details.temporary);
-      });
-    }),
-    browser.normandyAddonStudy.getStudy(),
-  ]);
+  // As a development convenience, act like we're enrolled in the treatment
+  // branch if we're a temporary add-on.  onInstalled with details.temporary =
+  // true will be fired in that case.  Add the listener now before awaiting the
+  // study below to make sure we don't miss the event.
+  let installPromise = new Promise(resolve => {
+    browser.runtime.onInstalled.addListener(details => {
+      resolve(details.temporary);
+    });
+  });
 
-  console.debug(`isTemporaryInstall=${isTemporaryInstall} study=${study}`);
-
-  // If we're enrolled in the study, set everything up.  As a development
-  // convenience, act like we're enrolled if we're a temporary add-on.
-  if (
-    (study && study.active && Object.values(BRANCHES).includes(study.branch)) ||
-    (!study && isTemporaryInstall)
-  ) {
-    await enroll(!study || study.branch == BRANCHES.TREATMENT);
+  // If we're enrolled in the study, set everything up, and then we're done.
+  let study = await browser.normandyAddonStudy.getStudy();
+  if (study) {
+    // Sanity check the study.  This conditional should always be true.
+    if (study.active && Object.values(BRANCHES).includes(study.branch)) {
+      await enroll(study.branch == BRANCHES.TREATMENT);
+    }
+    sendTestMessage("ready");
+    return;
   }
 
-  sendTestMessage("ready");
+  // There's no study.  If installation happens, then continue with the
+  // development convenience described above.
+  installPromise.then(async isTemporaryInstall => {
+    if (isTemporaryInstall) {
+      console.debug("isTemporaryInstall");
+      await enroll(true);
+    }
+    sendTestMessage("ready");
+  });
 })();
