@@ -9,7 +9,7 @@
       "overwriteDest": true
     },
     "ignoreFiles": [
-      "*~"
+      "**/*~"
     ],
     "sourceDir": "src"
   },

@@ -29,5 +29,19 @@
     ]
   },
   "incognito": "spanning",
-  "hidden": true
+  "hidden": true,
+  "experiment_apis": {
+    "experiments_urlbar": {
+      "schema": "experiments/urlbar/schema.json",
+      "parent": {
+        "scopes": [
+          "addon_parent"
+        ],
+        "script": "experiments/urlbar/api.js",
+        "paths": [
+          ["experiments", "urlbar"]
+        ]
+      }
+    }
+  }
 }
