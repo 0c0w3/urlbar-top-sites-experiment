@@ -2,36 +2,15 @@
   {
     "namespace": "experiments.urlbar",
     "description": "Experimental urlbar APIs. Non-experimental urlbar APIs are at <code>browser.urlbar</code>.",
-    "functions": [
-      {
-        "name": "setDefaultPref",
-        "type": "function",
-        "description": "Sets a pref on the default branch.",
-        "parameters": [
-          {
-            "name": "name",
-            "type": "string",
-            "description": "The pref's name."
-          },
-          {
-            "name": "value",
-            "type": "any",
-            "description": "The pref's value."
-          }
-        ]
+    "properties": {
+      "engagementTelemetry": {
+        "$ref": "types.Setting",
+        "description": "Enables or disables the engagement telemetry for the current browser session."
       },
-      {
-        "name": "resetDefaultPref",
-        "type": "function",
-        "description": "\"Resets\" a pref on the default branch that was previously set with <code>setDefaultPref</code>. The pref will be set to the original value that it had before <code>setDefaultPref</code> was first called.",
-        "parameters": [
-          {
-            "name": "name",
-            "type": "string",
-            "description": "The pref's name."
-          }
-        ]
+      "openViewOnFocus": {
+        "$ref": "types.Setting",
+        "description": "Enables or disables the open-view-on-focus mode for the current browser session."
       }
-    ]
+    }
   }
 ]

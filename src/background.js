@@ -119,13 +119,9 @@ async function getProviderResults(query) {
  *   True if we were enrolled on the treatment branch, false if control.
  */
 async function unenroll(isTreatmentBranch) {
-  await browser.experiments.urlbar.resetDefaultPref(
-    "browser.urlbar.eventTelemetry.enabled"
-  );
+  await browser.experiments.urlbar.engagementTelemetry.clear({});
   if (isTreatmentBranch) {
-    await browser.experiments.urlbar.resetDefaultPref(
-      "browser.urlbar.openViewOnFocus"
-    );
+    await browser.experiments.urlbar.openViewOnFocus.clear({});
     await browser.urlbar.onBehaviorRequested.removeListener(
       getProviderBehavior
     );
@@ -146,17 +142,11 @@ async function enroll(isTreatmentBranch) {
   });
 
   // Enable urlbar engagement event telemetry.  See bugs 1559136 and 1570683.
-  await browser.experiments.urlbar.setDefaultPref(
-    "browser.urlbar.eventTelemetry.enabled",
-    true
-  );
+  await browser.experiments.urlbar.engagementTelemetry.set({ value: true });
 
   if (isTreatmentBranch) {
     // Enable openViewOnFocus.
-    await browser.experiments.urlbar.setDefaultPref(
-      "browser.urlbar.openViewOnFocus",
-      true
-    );
+    await browser.experiments.urlbar.openViewOnFocus.set({ value: true });
 
     // Add our top-sites results provider.
     await browser.urlbar.onBehaviorRequested.addListener(
