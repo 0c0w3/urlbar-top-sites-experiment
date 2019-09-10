@@ -7,8 +7,6 @@
 /* global ExtensionAPI, XPCOMUtils */
 
 XPCOMUtils.defineLazyModuleGetters(this, {
-  ExtensionPreferencesManager:
-    "resource://gre/modules/ExtensionPreferencesManager.jsm",
   Preferences: "resource://gre/modules/Preferences.jsm",
 });
 
@@ -32,17 +30,8 @@ this.experiments_urlbar = class extends ExtensionAPI {
 
   _getDefaultSettingsAPI(extensionId, name, pref) {
     return {
-      get: async details => {
-        let levelOfControl = details.incognito
-          ? "not_controllable"
-          : await ExtensionPreferencesManager.getLevelOfControl(
-              extensionId,
-              name
-            );
-        return {
-          levelOfControl,
-          value: Preferences.get(pref),
-        };
+      get: details => {
+        return { value: Preferences.get(pref) };
       },
       set: details => {
         if (!this._initialDefaultPrefs) {
