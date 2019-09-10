@@ -22,13 +22,13 @@ this.experiments_urlbar = class extends ExtensionAPI {
     // ExtensionPreferencesManager doesn't properly reset prefs set on the
     // default branch.
     if (this._initialDefaultPrefs) {
-      for (let [name, value] of this._initialDefaultPrefs.entries()) {
-        defaultPreferences.set(name, value);
+      for (let [pref, value] of this._initialDefaultPrefs.entries()) {
+        defaultPreferences.set(pref, value);
       }
     }
   }
 
-  _getDefaultSettingsAPI(extensionId, name, pref) {
+  _getDefaultSettingsAPI(pref) {
     return {
       get: details => {
         return { value: Preferences.get(pref) };
@@ -56,13 +56,9 @@ this.experiments_urlbar = class extends ExtensionAPI {
       experiments: {
         urlbar: {
           engagementTelemetry: this._getDefaultSettingsAPI(
-            context.extension.id,
-            "engagementTelemetry",
             "browser.urlbar.eventTelemetry.enabled"
           ),
           openViewOnFocus: this._getDefaultSettingsAPI(
-            context.extension.id,
-            "openViewOnFocus",
             "browser.urlbar.openViewOnFocus"
           ),
         },
